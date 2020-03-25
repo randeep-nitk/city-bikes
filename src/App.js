@@ -1,25 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import CountryFlag from "./components/countryFlag";
+import CountryView from "./components/countryView";
+import { getDistinctCountries } from "./apis/bikeNetworksApis";
 
 function App() {
+  const [countries, setCountries] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState({});
+
+  useEffect(() => {
+    async function getCountries() {
+      let _countries = await getDistinctCountries();
+      setCountries(_countries);
+      if (_countries.length > 0) {
+        setSelectedCountry(_countries[0]);
+      }
+    }
+    getCountries();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <CountryView country={selectedCountry} />
+      {countries.map(country => {
+        return (
+          <CountryFlag
+            key={country.code}
+            country={country}
+            selectCountry={setSelectedCountry}
+          />
+        );
+      })}
+    </>
   );
 }
 
