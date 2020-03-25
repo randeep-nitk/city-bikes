@@ -1,3 +1,4 @@
+// Get the complete networks data
 async function getBikeNetworksAsync() {
   try {
     let bikeNetworks = await fetch("http://api.citybik.es/v2/networks");
@@ -7,6 +8,9 @@ async function getBikeNetworksAsync() {
   }
 }
 
+// Create the data set country wise.
+// each country records has cities.
+// each city has the reference to complete Network itself.
 export async function getDistinctCountries() {
   let bikeNetworks = await getBikeNetworksAsync();
   let countries = [];
